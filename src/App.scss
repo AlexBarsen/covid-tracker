@@ -1,0 +1,54 @@
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  font-size: 62.5%;
+}
+
+.app {
+  &__header {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 2rem;
+
+    &--title {
+      font-size: 3.2rem;
+    }
+
+    &--dropdowns {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    &--dropdown:not(:last-child) {
+      margin-right: 2rem;
+    }
+  }
+
+  &__stats {
+    margin-bottom: 4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &--infoboxes {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+
+    &--active {
+      font-size: 2rem;
+    }
+  }
+
+  &__container {
+    display: flex;
+    justify-content: space-around;
+  }
+}

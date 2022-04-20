@@ -1,0 +1,31 @@
+.card {
+  width: 30rem;
+
+  &:not(:last-child) {
+    margin-right: 2.5rem;
+  }
+  &__content {
+    &--title {
+      &::before {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 2px;
+        width: 100%;
+        background-color: black;
+        animation: titleUnderline 1s ease-in;
+      }
+
+      @keyframes titleUnderline {
+        0% {
+          width: 0%;
+        }
+
+        100% {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
