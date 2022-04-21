@@ -31,10 +31,10 @@
   }
 
   &__stats {
-    margin-bottom: 4rem;
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
+    margin-bottom: 4rem;
 
     &--heading {
       font-size: 2.2rem;
@@ -43,11 +43,8 @@
 
     &--infoboxes {
       display: flex;
-      justify-content: center;
-      margin-bottom: 2rem;
     }
-
-    &--active {
+    s &--active {
       font-size: 2rem;
     }
   }
@@ -56,4 +53,13 @@
     display: flex;
     justify-content: space-around;
   }
+}
+
+.wrapper {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  align-items: center;
+  justify-items: center;
+  gap: 5rem;
 }

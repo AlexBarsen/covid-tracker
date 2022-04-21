@@ -2,6 +2,7 @@ import React from "react";
 import ReactCountryFlag from "react-country-flag";
 
 import { Card, CardContent, Typography } from "@material-ui/core";
+import WorldFlag from "../../img/world_flag.png";
 
 import "./CountryDetails.scss";
 
@@ -23,34 +24,53 @@ const CountryDetails: React.FC<Props> = ({
   return (
     <Card className="details">
       <CardContent className="details__content">
-        <div className="details__content--img">
-          <ReactCountryFlag
-            countryCode={countryCode}
-            svg
-            style={{
-              width: "100%",
-              height: "100%",
-            }}
-            title="US"
-          />
+        <div className="details__image--wrapper">
+          {countryCode ? (
+            <ReactCountryFlag
+              countryCode={countryCode}
+              svg
+              className="details__image--img"
+            />
+          ) : (
+            <img
+              src={WorldFlag}
+              alt="World Flag"
+              className="details__image--img"
+            />
+          )}
         </div>
-        <Typography
-          className="details__content--title"
-          gutterBottom
-          variant="h3"
-          component="div"
-        >
-          {country}
-        </Typography>
-        <Typography className="details__content--detail" variant="body2">
-          <strong>Population:</strong> {population}
-        </Typography>
-        <Typography className="details__content--detail" variant="body2">
-          <strong>Active Cases:</strong> {active}
-        </Typography>
-        <Typography className="details__content--detail" variant="body2">
-          <strong>Tests done:</strong> {tests}
-        </Typography>
+
+        <div className="details__stats">
+          <Typography
+            className="details__stats--title"
+            gutterBottom
+            variant="h3"
+            component="div"
+          >
+            {country ? country : "Worldwide"}
+          </Typography>
+          <Typography
+            className="details__stats--row"
+            variant="h4"
+            component="p"
+          >
+            <strong>Population:</strong> {population}
+          </Typography>
+          <Typography
+            className="details__stats--row"
+            variant="h4"
+            component="p"
+          >
+            <strong>Active Cases:</strong> {active}
+          </Typography>
+          <Typography
+            className="details__stats--row"
+            variant="h4"
+            component="p"
+          >
+            <strong>Tests done:</strong> {tests}
+          </Typography>
+        </div>
       </CardContent>
     </Card>
   );

@@ -62,8 +62,6 @@ function App() {
     fetch("https://corona.lmao.ninja/v3/covid-19/all")
       .then((response) => response.json())
       .then((data) => setDisplayInfo(data));
-
-    return () => {};
   }, []);
 
   useEffect(() => {
@@ -200,41 +198,43 @@ function App() {
       </div>
 
       <div className="app__stats">
-        {/* <h2 className="app__stats--heading">
-          You are viewing the stats for:
-          {displayInfo?.continent
-            ? displayInfo.country
-              ? displayInfo.country
-              : displayInfo.continent
-            : "Worldwide"}
-        </h2> */}
-        <CountryDetails
-          country={displayInfo?.country}
-          countryCode={displayInfo?.countryInfo?.iso2}
-          population={displayInfo?.population}
-          active={displayInfo?.active}
-          tests={displayInfo?.tests}
-        />
         <div className="app__stats--infoboxes">
-          <InfoBox
-            title="Coronavirus Cases"
-            cases={numeral(displayInfo?.todayCases).format("0.0a")}
-            total={numeral(displayInfo?.cases).format("0.0a")}
-            isRed
-          ></InfoBox>
+          <CountryDetails
+            country={displayInfo?.country}
+            countryCode={displayInfo?.countryInfo?.iso2}
+            population={displayInfo?.population}
+            active={displayInfo?.active}
+            tests={displayInfo?.tests}
+          />
 
-          <InfoBox
-            title="Recovered"
-            cases={numeral(displayInfo?.todayRecovered).format("0.0a")}
-            total={numeral(displayInfo?.recovered).format("0.0a")}
-          ></InfoBox>
+          <div className="wrapper">
+            <InfoBox
+              title="Coronavirus Cases"
+              cases={numeral(displayInfo?.todayCases).format("0.0a")}
+              total={numeral(displayInfo?.cases).format("0.0a")}
+              isRed
+            ></InfoBox>
 
-          <InfoBox
-            title="Deaths"
-            cases={numeral(displayInfo?.todayDeaths).format("0.0a")}
-            total={numeral(displayInfo?.deaths).format("0.0a")}
-            isRed
-          ></InfoBox>
+            <InfoBox
+              title="Coronavirus Cases"
+              cases={numeral(displayInfo?.todayCases).format("0.0a")}
+              total={numeral(displayInfo?.cases).format("0.0a")}
+              isRed
+            ></InfoBox>
+
+            <InfoBox
+              title="Recovered"
+              cases={numeral(displayInfo?.todayRecovered).format("0.0a")}
+              total={numeral(displayInfo?.recovered).format("0.0a")}
+            ></InfoBox>
+
+            <InfoBox
+              title="Deaths"
+              cases={numeral(displayInfo?.todayDeaths).format("0.0a")}
+              total={numeral(displayInfo?.deaths).format("0.0a")}
+              isRed
+            ></InfoBox>
+          </div>
         </div>
       </div>
 

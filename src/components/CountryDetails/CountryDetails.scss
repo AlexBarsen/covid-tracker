@@ -1,15 +1,40 @@
 .details {
-  margin-bottom: 4rem;
+  height: 45rem;
+  width: 40rem;
+  margin-right: 7.5rem;
+
   &__content {
     display: flex;
     flex-direction: column;
+    height: 100%;
+  }
 
-    &--img {
-      width: 100%;
+  &__image {
+    &--wrapper {
+      width: 35rem;
+      margin: 0 auto;
+      margin-bottom: 1.5rem;
+      box-shadow: 4px 4px 6px -3px #000000;
     }
 
-    &--detail {
-      font-size: 1.6rem;
+    &--img {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: contain;
+    }
+  }
+
+  &__stats {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-grow: 1;
+
+    &--title {
+      align-self: center;
+    }
+
+    &--row {
     }
   }
 }
