@@ -1,132 +1,58 @@
 import React, { useState, useEffect } from "react";
 import { Select, MenuItem } from "@material-ui/core";
 
-import { Circle, Popup } from "react-leaflet";
-
 import numeral from "numeral";
 
 import InfoBox from "./components/InfoBox/InfoBox";
 import Table from "./components/Table/Table";
 import Map from "./components/Map/Map";
+import { sortData } from "./components/Utils/Utils";
+
+import { Country } from "./interfaces/Country";
+import { Continent } from "./interfaces/Continent";
+import { CountryInfo } from "./interfaces/CountryInfo";
+import { ContinentInfo } from "./interfaces/ContinentInfo";
+import { MapCoordinates } from "./interfaces/MapCoordinates";
 
 import "./App.scss";
 
-interface Country {
-  active: any;
-  name: any;
-}
-
-interface CountryInfo {
-  cases: number;
-  todayCases: number;
-  deaths: number;
-  todayDeaths: number;
-  recovered: number;
-  todayRecovered: number;
-  active: number;
-  countryInfo: {
-    lat: number;
-    long: number;
-  };
-}
-
-interface MapCoordinates {
-  lat: any;
-  lng: any;
-}
-
-interface CasesTypeColors {
-  cases: {
-    hex: string;
-    rgb: string;
-    half_op: string;
-    multiplier: number;
-  };
-  recovered: {
-    hex: string;
-    rgb: string;
-    half_op: string;
-    multiplier: number;
-  };
-  deaths: {
-    hex: string;
-    rgb: string;
-    half_op: string;
-    multiplier: number;
-  };
-}
-
-const casesTypeColors: CasesTypeColors = {
-  cases: {
-    hex: "#CC1034",
-    rgb: "rgb(204, 16, 52)",
-    half_op: "rgba(204, 16, 52, 0.5)",
-    multiplier: 800,
-  },
-  recovered: {
-    hex: "#7dd71d",
-    rgb: "rgb(125, 215, 29)",
-    half_op: "rgba(125, 215, 29, 0.5)",
-    multiplier: 1200,
-  },
-  deaths: {
-    hex: "#fb4443",
-    rgb: "rgb(251, 68, 67)",
-    half_op: "rgba(251, 68, 67, 0.5)",
-    multiplier: 2000,
-  },
-};
-
-// Draw circles on the map with interactive tooltip
-export const showDataOnMap = (data: any, casesType = "cases") => {
-  console.log(data);
-  data.map((country: any) => (
-    <Circle
-      center={[country.countryInfo.lat, country.countryInfo.long]}
-      fillOpacity={0.4}
-      color={casesTypeColors.cases.hex}
-      fillColor={casesTypeColors.cases.hex}
-      radius={Math.sqrt(country.cases) * casesTypeColors.cases.multiplier}
-    />
-  ));
-};
-
 function App() {
-  const [country, setCountry] = useState("worldwide");
+  const [country, setCountry] = useState<string>("worldwide");
   const [countries, setCountries] = useState([]);
-  const [countryInfo, setCountryInfo] = useState<CountryInfo | undefined>(
-    undefined
-  );
 
+  const [continent, setContinent] = useState<string>("worldwide");
   const [continents, setContinents] = useState([]);
-  const [continent, setContinent] = useState("worldwide");
-  const [continentInfo, setContinentInfo] = useState([]);
+
+  const [displayInfo, setDisplayInfo] = useState<
+    CountryInfo | ContinentInfo | undefined
+  >(undefined);
 
   const [tableData, setTableData] = useState<any>([]);
-  const [mapCenter, setMapCenter] = useState<any>({
+  const [mapCenter, setMapCenter] = useState<MapCoordinates>({
     lat: 34.80746,
     lng: -45.4796,
   });
-  const [mapZoom, setMapZoom] = useState(3);
+  const [mapZoom, setMapZoom] = useState<number>(3);
   const [mapCountries, setMapCountries] = useState([]);
 
   useEffect(() => {
     fetch("https://disease.sh/v3/covid-19/all")
       .then((response) => response.json())
-      .then((data) => setCountryInfo(data));
+      .then((data) => setDisplayInfo(data));
 
     return () => {};
   }, []);
 
   useEffect(() => {
-    const getCountriesData: any = async () => {
+    const getCountriesData = async () => {
       await fetch("https://disease.sh/v3/covid-19/countries")
         .then((response) => response.json())
         .then((data) => {
-          const countries = data.map((country: any) => ({
+          const countries = data.map((country: CountryInfo) => ({
             name: country.country,
             value: country.countryInfo.iso2,
           }));
+
           const sortedData = sortData(data);
           setCountries(countries);
           setMapCountries(data);
@@ -139,9 +65,8 @@ function App() {
       await fetch("https://disease.sh/v3/covid-19/continents")
         .then((response) => response.json())
         .then((data) => {
-          const continents = data.map((continent: any) => ({
+          const continents = data.map((continent: ContinentInfo) => ({
             name: continent.continent,
-            population: continent.population,
           }));
           setContinents(continents);
         });
@@ -151,8 +76,10 @@ function App() {
     getContinetsData();
   }, []);
 
-  const onCountryChange = async (event: any) => {
-    const countryCode = event.target.value;
+  const onCountryChange = async (
+    event: React.ChangeEvent<{ value: unknown }>
+  ) => {
+    const countryCode = event.target.value as string;
 
     const url =
       countryCode === "worldwide"
@@ -163,28 +90,30 @@ function App() {
       .then((response) => response.json())
       .then((data) => {
         setCountry(countryCode);
-        setCountryInfo(data);
+        setDisplayInfo(data);
         setMapCenter({ lat: data.countryInfo.lat, lng: data.countryInfo.long });
+        console.log(mapCenter);
         setMapZoom(4);
       });
   };
 
-  const onContinentChange = (event: any) => {
-    const continentName = event.target.value;
+  const onContinentChange = async (
+    event: React.ChangeEvent<{ value: unknown }>
+  ) => {
+    const continentName = event.target.value as string;
 
-    setContinent(continentName);
-  };
+    const url =
+      continentName === "worldwide"
+        ? "https://disease.sh/v3/covid-19/all "
+        : `https://disease.sh/v3/covid-19/continents/${continentName}`;
 
-  const sortData = (data: any) => {
-    const sortedData = [...data];
-    sortedData.sort((a, b) => {
-      if (a.cases > b.cases) {
-        return -1;
-      } else {
-        return 1;
-      }
-    });
-    return sortedData;
+    await fetch(url)
+      .then((response) => response.json())
+      .then((data) => {
+        setDisplayInfo(data);
+        console.log(data);
+        setContinent(continentName);
+      });
   };
 
   return (
@@ -200,8 +129,8 @@ function App() {
             className="app__header--dropdown"
           >
             <MenuItem value="worldwide">Worldwide</MenuItem>
-            {countries.map((country: any, index) => (
-              <MenuItem value={country.value} key={country.value + index}>
+            {countries.map((country: Country, index) => (
+              <MenuItem value={country.value} key={index + country.value}>
                 {country.name}
               </MenuItem>
             ))}
@@ -214,8 +143,8 @@ function App() {
             className="app__header--dropdown"
           >
             <MenuItem value="worldwide">Worldwide</MenuItem>
-            {continents.map((continent: any, index) => (
-              <MenuItem value={continent.name} key={continent + index}>
+            {continents.map((continent: Continent) => (
+              <MenuItem value={continent.name} key={continent.name}>
                 {continent.name}
               </MenuItem>
             ))}
@@ -224,29 +153,32 @@ function App() {
       </div>
 
       <div className="app__stats">
+        <h2>
+          You are viewing the stats for:
+          {displayInfo?.continent
+            ? displayInfo.country
+              ? displayInfo.country
+              : displayInfo.continent
+            : "Worldwide"}
+        </h2>
         <div className="app__stats--infoboxes">
-          {/* <InfoBox
-            title="Active"
-            total={numeral(allData?.active).format("0.0a")}
-          ></InfoBox> */}
-
           <InfoBox
             title="Coronavirus Cases"
-            cases={numeral(countryInfo?.todayCases).format("0.0a")}
-            total={numeral(countryInfo?.cases).format("0.0a")}
+            cases={numeral(displayInfo?.todayCases).format("0.0a")}
+            total={numeral(displayInfo?.cases).format("0.0a")}
             isRed
           ></InfoBox>
 
           <InfoBox
             title="Recovered"
-            cases={numeral(countryInfo?.todayRecovered).format("0.0a")}
-            total={numeral(countryInfo?.recovered).format("0.0a")}
+            cases={numeral(displayInfo?.todayRecovered).format("0.0a")}
+            total={numeral(displayInfo?.recovered).format("0.0a")}
           ></InfoBox>
 
           <InfoBox
             title="Deaths"
-            cases={numeral(countryInfo?.todayDeaths).format("0.0a")}
-            total={numeral(countryInfo?.deaths).format("0.0a")}
+            cases={numeral(displayInfo?.todayDeaths).format("0.0a")}
+            total={numeral(displayInfo?.deaths).format("0.0a")}
             isRed
           ></InfoBox>
         </div>
@@ -254,7 +186,12 @@ function App() {
 
       <div className="app__container">
         <div className="app__map">
-          <Map mapCountries={mapCountries} center={mapCenter} zoom={mapZoom} />
+          <Map
+            mapCountries={mapCountries}
+            center={mapCenter}
+            zoom={mapZoom}
+            casesType="cases"
+          />
         </div>
 
         <div className="app__cases">
