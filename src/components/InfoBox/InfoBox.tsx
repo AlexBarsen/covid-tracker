@@ -1,6 +1,6 @@
 import React from "react";
 import "./InfoBox.scss";
-import { Card, CardContent, Box, Typography } from "@material-ui/core";
+import { Card, CardContent, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
 interface Props {
@@ -8,6 +8,9 @@ interface Props {
   cases?: string;
   total?: string;
   isRed?: boolean;
+  oneCasePerPeople?: number;
+  oneDeathPerPeople?: number;
+  oneTestPerPeople?: number;
 }
 
 const useStyles = makeStyles({
@@ -25,6 +28,10 @@ const useStyles = makeStyles({
       marginBottom: ".5rem",
     },
   },
+  otherTypographyStyle: {
+    fontSize: "1.6rem",
+    letterSpacing: ".1rem",
+  },
   spanColorRed: {
     fontWeight: "bold",
     color: "red",
@@ -35,26 +42,56 @@ const useStyles = makeStyles({
   },
 });
 
-const InfoBox: React.FC<Props> = ({ title, cases, total, isRed }) => {
+const InfoBox: React.FC<Props> = ({
+  title,
+  cases,
+  total,
+  isRed,
+  oneCasePerPeople,
+  oneDeathPerPeople,
+  oneTestPerPeople,
+}) => {
   const classes = useStyles();
+
+  const statistics = () => (
+    <>
+      <Typography className={classes.titleStyle + " card__content--title"}>
+        {title}:
+      </Typography>
+      <Typography variant="h3" className={classes.typographyStyle}>
+        <span className={isRed ? classes.spanColorRed : classes.spanColorGreen}>
+          +{cases}
+        </span>
+      </Typography>
+      <Typography variant="h4" className={classes.typographyStyle}>
+        <strong>Total:</strong> {total}
+      </Typography>
+    </>
+  );
+
+  const otherStatistics = () => (
+    <>
+      <Typography className={classes.titleStyle + " card__content--title"}>
+        {title}:
+      </Typography>
+      <Typography variant="h3" className={classes.otherTypographyStyle}>
+        One Case Per <strong>{oneCasePerPeople}</strong> people.
+      </Typography>
+      <Typography variant="h4" className={classes.otherTypographyStyle}>
+        One Death Per <strong>{oneDeathPerPeople}</strong> people.
+      </Typography>
+      <Typography variant="h4" className={classes.otherTypographyStyle}>
+        One Test Per <strong>{oneTestPerPeople}</strong> people.
+      </Typography>
+    </>
+  );
 
   return (
     <Card className="card">
       <CardContent className="card__content">
-        <Box></Box>
-        <Typography className={classes.titleStyle + " card__content--title"}>
-          {title}:
-        </Typography>
-        <Typography variant="h3" className={classes.typographyStyle}>
-          <span
-            className={isRed ? classes.spanColorRed : classes.spanColorGreen}
-          >
-            +{cases}
-          </span>
-        </Typography>
-        <Typography variant="h4" className={classes.typographyStyle}>
-          <strong>Total:</strong> {total}
-        </Typography>
+        {oneCasePerPeople || oneDeathPerPeople || oneTestPerPeople
+          ? otherStatistics()
+          : statistics()}
       </CardContent>
     </Card>
   );

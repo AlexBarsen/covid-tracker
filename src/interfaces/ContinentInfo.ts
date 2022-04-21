@@ -15,4 +15,7 @@ export interface ContinentInfo {
     long: number;
   };
   countryInfo: undefined;
+  oneCasePerPeople: undefined;
+  oneDeathPerPeople: undefined;
+  oneTestPerPeople: undefined;
 }

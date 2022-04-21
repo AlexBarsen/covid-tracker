@@ -10,6 +10,9 @@ export interface CountryInfo {
   population: number;
   active: number;
   tests: number;
+  oneCasePerPeople: number;
+  oneDeathPerPeople: number;
+  oneTestPerPeople: number;
   countryInfo: {
     iso2: string;
     lat: number;

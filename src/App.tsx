@@ -59,14 +59,14 @@ function App() {
   const classes = useStyles();
 
   useEffect(() => {
-    fetch("https://corona.lmao.ninja/v3/covid-19/all")
+    fetch("https://disease.sh/v3/covid-19/all")
       .then((response) => response.json())
       .then((data) => setDisplayInfo(data));
   }, []);
 
   useEffect(() => {
     const getCountriesData = async () => {
-      await fetch("https://corona.lmao.ninja/v3/covid-19/countries")
+      await fetch("https://disease.sh/v3/covid-19/countries")
         .then((response) => response.json())
         .then((data) => {
           const countries = data.map((country: CountryInfo) => ({
@@ -83,7 +83,7 @@ function App() {
     };
 
     const getContinetsData = async () => {
-      await fetch("https://corona.lmao.ninja/v3/covid-19/continents")
+      await fetch("https://disease.sh/v3/covid-19/continents")
         .then((response) => response.json())
         .then((data) => {
           const continents = data.map((continent: ContinentInfo) => ({
@@ -104,8 +104,8 @@ function App() {
 
     const url =
       countryCode === "worldwide"
-        ? "https://corona.lmao.ninja/v3/covid-19/all"
-        : `https://corona.lmao.ninja/v3/covid-19/countries/${countryCode}`;
+        ? "https://disease.sh/v3/covid-19/all"
+        : `https://disease.sh/v3/covid-19/countries/${countryCode}`;
 
     await fetch(url)
       .then((response) => response.json())
@@ -125,8 +125,8 @@ function App() {
 
     const url =
       continentName === "worldwide"
-        ? "https://corona.lmao.ninja/v3/covid-19/all "
-        : `https://corona.lmao.ninja/v3/covid-19/continents/${continentName}`;
+        ? "https://disease.sh/v3/covid-19/all "
+        : `https://disease.sh/v3/covid-19/continents/${continentName}`;
 
     await fetch(url)
       .then((response) => response.json())
@@ -202,9 +202,9 @@ function App() {
           <CountryDetails
             country={displayInfo?.country}
             countryCode={displayInfo?.countryInfo?.iso2}
-            population={displayInfo?.population}
-            active={displayInfo?.active}
-            tests={displayInfo?.tests}
+            population={numeral(displayInfo?.population).format("0.0a")}
+            active={numeral(displayInfo?.active).format("0.0a")}
+            tests={numeral(displayInfo?.tests).format("0.0a")}
           />
 
           <div className="wrapper">
@@ -216,9 +216,10 @@ function App() {
             ></InfoBox>
 
             <InfoBox
-              title="Coronavirus Cases"
-              cases={numeral(displayInfo?.todayCases).format("0.0a")}
-              total={numeral(displayInfo?.cases).format("0.0a")}
+              title="Other Statistics"
+              oneCasePerPeople={displayInfo?.oneCasePerPeople}
+              oneDeathPerPeople={displayInfo?.oneDeathPerPeople}
+              oneTestPerPeople={displayInfo?.oneTestPerPeople}
               isRed
             ></InfoBox>
 
