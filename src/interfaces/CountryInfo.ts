@@ -7,6 +7,9 @@ export interface CountryInfo {
   todayDeaths: number;
   recovered: number;
   todayRecovered: number;
+  population: number;
+  active: number;
+  tests: number;
   countryInfo: {
     iso2: string;
     lat: number;

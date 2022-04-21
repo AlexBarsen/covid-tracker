@@ -1,0 +1,15 @@
+.details {
+  margin-bottom: 4rem;
+  &__content {
+    display: flex;
+    flex-direction: column;
+
+    &--img {
+      width: 100%;
+    }
+
+    &--detail {
+      font-size: 1.6rem;
+    }
+  }
+}

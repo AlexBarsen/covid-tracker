@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Select, MenuItem } from "@material-ui/core";
+import { FormControl, InputLabel, Select, MenuItem } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 
 import numeral from "numeral";
 
 import InfoBox from "./components/InfoBox/InfoBox";
 import Table from "./components/Table/Table";
 import Map from "./components/Map/Map";
+import CountryDetails from "./components/CountryDetails/CountryDetails";
+
 import { sortData } from "./components/Utils/Utils";
 
 import { Country } from "./interfaces/Country";
@@ -15,6 +18,24 @@ import { ContinentInfo } from "./interfaces/ContinentInfo";
 import { MapCoordinates } from "./interfaces/MapCoordinates";
 
 import "./App.scss";
+
+const useStyles = makeStyles({
+  label: {
+    fontSize: "14px",
+  },
+  select: {
+    width: "15rem",
+    fontSize: 14,
+    textAlign: "center",
+
+    "& ul": {
+      backgroundColor: "#d3d3d3",
+    },
+    "& li": {
+      fontSize: 12,
+    },
+  },
+});
 
 function App() {
   const [country, setCountry] = useState<string>("worldwide");
@@ -35,8 +56,10 @@ function App() {
   const [mapZoom, setMapZoom] = useState<number>(3);
   const [mapCountries, setMapCountries] = useState([]);
 
+  const classes = useStyles();
+
   useEffect(() => {
-    fetch("https://disease.sh/v3/covid-19/all")
+    fetch("https://corona.lmao.ninja/v3/covid-19/all")
       .then((response) => response.json())
       .then((data) => setDisplayInfo(data));
 
@@ -45,7 +68,7 @@ function App() {
 
   useEffect(() => {
     const getCountriesData = async () => {
-      await fetch("https://disease.sh/v3/covid-19/countries")
+      await fetch("https://corona.lmao.ninja/v3/covid-19/countries")
         .then((response) => response.json())
         .then((data) => {
           const countries = data.map((country: CountryInfo) => ({
@@ -62,7 +85,7 @@ function App() {
     };
 
     const getContinetsData = async () => {
-      await fetch("https://disease.sh/v3/covid-19/continents")
+      await fetch("https://corona.lmao.ninja/v3/covid-19/continents")
         .then((response) => response.json())
         .then((data) => {
           const continents = data.map((continent: ContinentInfo) => ({
@@ -83,8 +106,8 @@ function App() {
 
     const url =
       countryCode === "worldwide"
-        ? "https://disease.sh/v3/covid-19/all"
-        : `https://disease.sh/v3/covid-19/countries/${countryCode}`;
+        ? "https://corona.lmao.ninja/v3/covid-19/all"
+        : `https://corona.lmao.ninja/v3/covid-19/countries/${countryCode}`;
 
     await fetch(url)
       .then((response) => response.json())
@@ -104,8 +127,8 @@ function App() {
 
     const url =
       continentName === "worldwide"
-        ? "https://disease.sh/v3/covid-19/all "
-        : `https://disease.sh/v3/covid-19/continents/${continentName}`;
+        ? "https://corona.lmao.ninja/v3/covid-19/all "
+        : `https://corona.lmao.ninja/v3/covid-19/continents/${continentName}`;
 
     await fetch(url)
       .then((response) => response.json())
@@ -122,45 +145,76 @@ function App() {
         <h1 className="app__header--title">Covid-19-Tracker</h1>
 
         <div className="app__header--dropdowns">
-          <Select
-            variant="outlined"
-            onChange={onCountryChange}
-            value={country}
+          <FormControl
             className="app__header--dropdown"
+            variant="outlined"
+            style={{ width: "100%", marginBottom: 32 }}
           >
-            <MenuItem value="worldwide">Worldwide</MenuItem>
-            {countries.map((country: Country, index) => (
-              <MenuItem value={country.value} key={index + country.value}>
-                {country.name}
-              </MenuItem>
-            ))}
-          </Select>
+            <InputLabel id="select-label" className={classes.label}>
+              Country
+            </InputLabel>
+            <Select
+              label="Country"
+              labelId="select-label"
+              variant="outlined"
+              onChange={onCountryChange}
+              value={country}
+              className={classes.select}
+              MenuProps={{ classes: { paper: classes.select } }}
+            >
+              <MenuItem value="worldwide">Worldwide</MenuItem>
+              {countries.map((country: Country, index) => (
+                <MenuItem value={country.value} key={index + country.value}>
+                  {country.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
 
-          <Select
-            variant="outlined"
-            onChange={onContinentChange}
-            value={continent}
+          <FormControl
             className="app__header--dropdown"
+            variant="outlined"
+            style={{ width: "100%", marginBottom: 32 }}
           >
-            <MenuItem value="worldwide">Worldwide</MenuItem>
-            {continents.map((continent: Continent) => (
-              <MenuItem value={continent.name} key={continent.name}>
-                {continent.name}
-              </MenuItem>
-            ))}
-          </Select>
+            <InputLabel id="select-label" className={classes.label}>
+              Continent
+            </InputLabel>
+            <Select
+              label="Continent"
+              labelId="select-label"
+              variant="outlined"
+              onChange={onContinentChange}
+              value={continent}
+              className={classes.select + " app__header--dropdown"}
+              MenuProps={{ classes: { paper: classes.select } }}
+            >
+              <MenuItem value="worldwide">Worldwide</MenuItem>
+              {continents.map((continent: Continent) => (
+                <MenuItem value={continent.name} key={continent.name}>
+                  {continent.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
         </div>
       </div>
 
       <div className="app__stats">
-        <h2>
+        {/* <h2 className="app__stats--heading">
           You are viewing the stats for:
           {displayInfo?.continent
             ? displayInfo.country
               ? displayInfo.country
               : displayInfo.continent
             : "Worldwide"}
-        </h2>
+        </h2> */}
+        <CountryDetails
+          country={displayInfo?.country}
+          countryCode={displayInfo?.countryInfo?.iso2}
+          population={displayInfo?.population}
+          active={displayInfo?.active}
+          tests={displayInfo?.tests}
+        />
         <div className="app__stats--infoboxes">
           <InfoBox
             title="Coronavirus Cases"
