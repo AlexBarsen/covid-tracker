@@ -1,0 +1,20 @@
+.popup {
+  display: flex;
+  flex-direction: row;
+
+  &__title {
+    font-size: 1.6rem;
+    font-weight: bold;
+  }
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+    &--stat {
+      font-size: 1.4rem;
+      padding: 0.2rem 0rem;
+    }
+  }
+}

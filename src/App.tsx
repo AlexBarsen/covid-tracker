@@ -8,6 +8,7 @@ import InfoBox from "./components/InfoBox/InfoBox";
 import Table from "./components/Table/Table";
 import Map from "./components/Map/Map";
 import CountryDetails from "./components/CountryDetails/CountryDetails";
+import LineGraph from "./components/LineGraph/LineGraph";
 
 import { sortData } from "./components/Utils/Utils";
 
@@ -260,7 +261,9 @@ function App() {
             <Table countries={tableData}></Table>
           </div>
 
-          <div className="app__cases--graph"></div>
+          <div className="app__cases--graph">
+            <LineGraph casesType="cases" />
+          </div>
         </div>
       </div>
     </div>

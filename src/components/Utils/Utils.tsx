@@ -4,6 +4,9 @@ import { Circle, Popup } from "react-leaflet";
 import { CountryInfo } from "../../interfaces/CountryInfo";
 import { CasesTypeColors } from "../../interfaces/CasesTypeColors";
 
+import "./Utils.scss";
+import numeral from "numeral";
+
 export const sortData = (data: CountryInfo[]) => {
   console.log(data);
   const sortedData = [...data];
@@ -22,7 +25,7 @@ const casesTypeColors: { [index: string]: any } = {
     hex: "#CC1034",
     rgb: "rgb(204, 16, 52)",
     half_op: "rgba(204, 16, 52, 0.5)",
-    multiplier: 800,
+    multiplier: 90,
   },
   recovered: {
     hex: "#7dd71d",
@@ -51,8 +54,21 @@ export const showDataOnMap = (data: CountryInfo[], casesType = "cases") =>
         Math.sqrt(country[casesType]) * casesTypeColors[casesType].multiplier
       }
     >
-      <Popup>
-        <h1>Sallot</h1>
+      <Popup className="popup">
+        <div className="popup__title">
+          <span>{country.country}</span>
+        </div>
+        <div className="popup__container">
+          <div className="popup__container--stat">
+            Cases: {numeral(country.cases).format("0.0a")}
+          </div>
+          <div className="popup__container--stat">
+            Recovered: {numeral(country.recovered).format("0.0a")}
+          </div>
+          <div className="popup__container--stat">
+            Deaths: {numeral(country.deaths).format("0.0a")}
+          </div>
+        </div>
       </Popup>
     </Circle>
   ));

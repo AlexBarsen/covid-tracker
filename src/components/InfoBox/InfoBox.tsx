@@ -3,6 +3,8 @@ import "./InfoBox.scss";
 import { Card, CardContent, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
+import numeral from "numeral";
+
 interface Props {
   title: string;
   cases?: string;
@@ -34,7 +36,7 @@ const useStyles = makeStyles({
     },
   },
   otherTypographyStyle: {
-    fontSize: "1.6rem",
+    fontSize: "1.4rem",
     letterSpacing: ".1rem",
   },
   spanColorRed: {
@@ -84,13 +86,13 @@ const InfoBox: React.FC<Props> = ({
       <Typography className={classes.titleStyle + " card__content--title"}>
         {title}:
       </Typography>
-      <Typography variant="h3" className={classes.otherTypographyStyle}>
+      <Typography className={classes.otherTypographyStyle}>
         One Case Per <strong>{oneCasePerPeople}</strong> people.
       </Typography>
-      <Typography variant="h4" className={classes.otherTypographyStyle}>
+      <Typography className={classes.otherTypographyStyle}>
         One Death Per <strong>{oneDeathPerPeople}</strong> people.
       </Typography>
-      <Typography variant="h4" className={classes.otherTypographyStyle}>
+      <Typography className={classes.otherTypographyStyle}>
         One Test Per <strong>{oneTestPerPeople}</strong> people.
       </Typography>
     </>
@@ -101,20 +103,25 @@ const InfoBox: React.FC<Props> = ({
       <Typography className={classes.titleStyle + " card__content--title"}>
         {title}:
       </Typography>
-      <Typography variant="h3" className={classes.otherTypographyStyle}>
-        One Case Per <strong>{casesPerOneMillion}</strong> people.
+      <Typography className={classes.otherTypographyStyle}>
+        <strong>{numeral(casesPerOneMillion).format("0.0a")}</strong> cases per
+        million.
       </Typography>
-      <Typography variant="h4" className={classes.otherTypographyStyle}>
-        One Death Per <strong>{deathsPerOneMillion}</strong> people.
+      <Typography className={classes.otherTypographyStyle}>
+        <strong>{numeral(deathsPerOneMillion).format("0.0a")}</strong> deaths
+        per million.
       </Typography>
-      <Typography variant="h4" className={classes.otherTypographyStyle}>
-        One Test Per <strong>{testsPerOneMillion}</strong> people.
+      <Typography className={classes.otherTypographyStyle}>
+        <strong>{numeral(testsPerOneMillion).format("0.0a")}</strong> tests per
+        million.
       </Typography>
-      <Typography variant="h4" className={classes.otherTypographyStyle}>
-        One Test Per <strong>{activePerOneMillion}</strong> people.
+      <Typography className={classes.otherTypographyStyle}>
+        <strong>{numeral(activePerOneMillion).format("0.0a")}</strong> active
+        per million.
       </Typography>
-      <Typography variant="h4" className={classes.otherTypographyStyle}>
-        One Test Per <strong>{recoveredPerOneMillion}</strong> people.
+      <Typography className={classes.otherTypographyStyle}>
+        <strong>{numeral(recoveredPerOneMillion).format("0.0a")}</strong>
+        recovered per million.
       </Typography>
     </>
   );
