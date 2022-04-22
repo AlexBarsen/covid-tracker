@@ -18,4 +18,9 @@ export interface CountryInfo {
     lat: number;
     long: number;
   };
+  testsPerOneMillion: undefined;
+  activePerOneMillion: undefined;
+  recoveredPerOneMillion: undefined;
+  casesPerOneMillion: undefined;
+  deathsPerOneMillion: undefined;
 }

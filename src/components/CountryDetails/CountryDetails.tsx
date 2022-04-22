@@ -9,6 +9,7 @@ import "./CountryDetails.scss";
 interface Props {
   countryCode: any;
   country: any;
+  continent: any;
   population: any;
   active: any;
   tests: any;
@@ -16,6 +17,7 @@ interface Props {
 
 const CountryDetails: React.FC<Props> = ({
   country,
+  continent,
   countryCode,
   population,
   active,
@@ -47,7 +49,7 @@ const CountryDetails: React.FC<Props> = ({
             variant="h3"
             component="div"
           >
-            {country ? country : "Worldwide"}
+            {country ? country : continent ? continent : "Worldwide"}
           </Typography>
           <Typography
             className="details__stats--row"

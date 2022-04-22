@@ -77,7 +77,6 @@ function App() {
           const sortedData = sortData(data);
           setCountries(countries);
           setMapCountries(data);
-
           setTableData(sortedData);
         });
     };
@@ -113,7 +112,6 @@ function App() {
         setCountry(countryCode);
         setDisplayInfo(data);
         setMapCenter({ lat: data.countryInfo.lat, lng: data.countryInfo.long });
-        console.log(mapCenter);
         setMapZoom(4);
       });
   };
@@ -132,7 +130,7 @@ function App() {
       .then((response) => response.json())
       .then((data) => {
         setDisplayInfo(data);
-        console.log(data);
+        console.log(displayInfo);
         setContinent(continentName);
       });
   };
@@ -201,6 +199,7 @@ function App() {
         <div className="app__stats--infoboxes">
           <CountryDetails
             country={displayInfo?.country}
+            continent={displayInfo?.continent}
             countryCode={displayInfo?.countryInfo?.iso2}
             population={numeral(displayInfo?.population).format("0.0a")}
             active={numeral(displayInfo?.active).format("0.0a")}
@@ -220,6 +219,11 @@ function App() {
               oneCasePerPeople={displayInfo?.oneCasePerPeople}
               oneDeathPerPeople={displayInfo?.oneDeathPerPeople}
               oneTestPerPeople={displayInfo?.oneTestPerPeople}
+              deathsPerOneMillion={displayInfo?.deathsPerOneMillion}
+              testsPerOneMillion={displayInfo?.testsPerOneMillion}
+              recoveredPerOneMillion={displayInfo?.recoveredPerOneMillion}
+              activePerOneMillion={displayInfo?.activePerOneMillion}
+              casesPerOneMillion={displayInfo?.casesPerOneMillion}
               isRed
             ></InfoBox>
 

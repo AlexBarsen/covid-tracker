@@ -18,4 +18,9 @@ export interface ContinentInfo {
   oneCasePerPeople: undefined;
   oneDeathPerPeople: undefined;
   oneTestPerPeople: undefined;
+  testsPerOneMillion: number;
+  activePerOneMillion: number;
+  recoveredPerOneMillion: number;
+  casesPerOneMillion: number;
+  deathsPerOneMillion: number;
 }

@@ -11,6 +11,11 @@ interface Props {
   oneCasePerPeople?: number;
   oneDeathPerPeople?: number;
   oneTestPerPeople?: number;
+  deathsPerOneMillion?: number;
+  testsPerOneMillion?: number;
+  activePerOneMillion?: number;
+  recoveredPerOneMillion?: number;
+  casesPerOneMillion?: number;
 }
 
 const useStyles = makeStyles({
@@ -50,6 +55,11 @@ const InfoBox: React.FC<Props> = ({
   oneCasePerPeople,
   oneDeathPerPeople,
   oneTestPerPeople,
+  deathsPerOneMillion,
+  testsPerOneMillion,
+  recoveredPerOneMillion,
+  casesPerOneMillion,
+  activePerOneMillion,
 }) => {
   const classes = useStyles();
 
@@ -69,7 +79,7 @@ const InfoBox: React.FC<Props> = ({
     </>
   );
 
-  const otherStatistics = () => (
+  const otherStatisticsCountries = () => (
     <>
       <Typography className={classes.titleStyle + " card__content--title"}>
         {title}:
@@ -86,11 +96,40 @@ const InfoBox: React.FC<Props> = ({
     </>
   );
 
+  const otherStatisticsContinents = () => (
+    <>
+      <Typography className={classes.titleStyle + " card__content--title"}>
+        {title}:
+      </Typography>
+      <Typography variant="h3" className={classes.otherTypographyStyle}>
+        One Case Per <strong>{casesPerOneMillion}</strong> people.
+      </Typography>
+      <Typography variant="h4" className={classes.otherTypographyStyle}>
+        One Death Per <strong>{deathsPerOneMillion}</strong> people.
+      </Typography>
+      <Typography variant="h4" className={classes.otherTypographyStyle}>
+        One Test Per <strong>{testsPerOneMillion}</strong> people.
+      </Typography>
+      <Typography variant="h4" className={classes.otherTypographyStyle}>
+        One Test Per <strong>{activePerOneMillion}</strong> people.
+      </Typography>
+      <Typography variant="h4" className={classes.otherTypographyStyle}>
+        One Test Per <strong>{recoveredPerOneMillion}</strong> people.
+      </Typography>
+    </>
+  );
+
   return (
     <Card className="card">
       <CardContent className="card__content">
         {oneCasePerPeople || oneDeathPerPeople || oneTestPerPeople
-          ? otherStatistics()
+          ? otherStatisticsCountries()
+          : casesPerOneMillion ||
+            deathsPerOneMillion ||
+            testsPerOneMillion ||
+            activePerOneMillion ||
+            recoveredPerOneMillion
+          ? otherStatisticsContinents()
           : statistics()}
       </CardContent>
     </Card>
